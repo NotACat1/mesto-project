@@ -1,0 +1,28 @@
+.profile__btn-create-card {
+  align-self: stretch;
+  padding: 0;
+  height: 50px;
+  box-sizing: border-box;
+  border: 2px solid #FFF;
+  border-radius: 2px;
+  background-color: #00000000;
+  transition: opacity .5s ease-out;
+  background-image: url("../../../images/create-card.svg");
+  background-size: 16px 16px;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.profile__btn-create-card:hover {
+  opacity: .6;
+}
+
+@media screen and (min-width: 768px) {
+  .profile__btn-create-card {
+    margin-left: auto;
+    height: 50px;
+    width: 150px;
+    align-self: center;
+    background-size: 22px 22px;
+  }
+}
