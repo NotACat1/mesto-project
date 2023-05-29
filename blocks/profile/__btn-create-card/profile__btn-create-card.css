@@ -1,4 +1,5 @@
 .profile__btn-create-card {
+  cursor: pointer;
   align-self: stretch;
   padding: 0;
   height: 50px;

@@ -1,4 +1,5 @@
 .element__btn-like {
+  cursor: pointer;
   align-self: center;
   background-color: #00000000;
   padding: 0;
