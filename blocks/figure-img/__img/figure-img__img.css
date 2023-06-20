@@ -1,0 +1,14 @@
+.figure-img__img {
+  height: 299px;
+  max-width: 240px;
+  object-fit: cover;
+  object-position: center center;
+  margin-bottom: 10px;
+}
+
+@media screen and (min-width: 920px) {
+  .figure-img__img {
+    height: 540px;
+    max-width: 850px;
+  }
+}
