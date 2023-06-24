@@ -51,7 +51,7 @@
   <footer class="footer">
     <p class="footer__copy">&copy;2020 Mesto Russia</p>
   </footer>
-  <div class="popup">
+  <div class="popup profile-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
       <form method="get" name="form-edit" class="form-edit">
@@ -64,7 +64,7 @@
       </form>
     </div>
   </div>
-  <div class="popup">
+  <div class="popup card-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
       <form method="get" name="form-edit" class="form-edit">
@@ -77,7 +77,7 @@
       </form>
     </div>
   </div>
-  <div class="popup popup_black">
+  <div class="popup popup_black image-popup">
     <div class="popup__container">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
       <figure class="figure-img">
@@ -86,7 +86,14 @@
       </figure>
     </div>
   </div>
-  
+  <template id="card">
+    <button class="element__btn-delete" aria-label="Удалить" type="button"></button>
+    <img class="element__img" alt="" src="">
+    <div class="element__section-info">
+      <h2 class="element__title"></h2>
+      <button class="element__btn-like" aria-label="Нравится" type="button"></button>
+    </div>
+  </template>   
   <script src="./main.js"></script>
 </body>
 </html>

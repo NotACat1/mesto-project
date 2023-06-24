@@ -1,164 +1,111 @@
-// Функция открытия Popup
-// Добавление класса '.popup_opened' с CSS свойством: 'display: none;' -> 'display: block;'
-// Входные данные:
-// 1. popup -> объект Popup необходимого для открытия.
+// Открытие popup
 function openPopup(popup) {
   popup.classList.add('popup_opened');
 }
 
-// Функция закрытия Popup
-// Удаление класса '.popup_opened' с CSS свойством: 'display: block;' -> 'display: none;'
-// Входные данные:
-// 1. popup -> объект Popup необходимого для открытия.
+// Закрытие popup
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-// Функция Submit Popup редактирования профиля
-// Входные данные:
-// 1. name -> никнейм профиля;
-// 2. subtitle -> описание профиля.
-function handleFormSubmitEditProfile(name, subtitle) {
-  const profile_name = document.querySelector('.profile__name');
-  const profile_subtitle = document.querySelector('.profile__subtitle');
-
-  profile_name.textContent = name;
-  profile_subtitle.textContent = subtitle;
-}
-
-// Функция Submit Popup создания фотокарточки
-// Входные данные:
-// 1. nameCard -> название фотокарточки;
-// 2. linkCard -> ссылка на изображение фотокарточки.
-function handleFormSubmitCreateCard(nameCard, linkCard) {
-  initialCards.push({ name: nameCard, link: linkCard });
-  return createCard(nameCard, linkCard);
-}
-
-// Функция создания фотокарточки
-// Входные данные:
-// 1. name -> имя фотокарточки;
-// 2. link -> ссылка на изображение фотокарточки.
-// Выходные данные: готовая фотокарточка для добавления в DOM
-function createCard(name, link) {
-  // создание элементов для DOM
-  const PhotoCard = document.createElement('article'); // фотокарточка
-  const PhotoCard_img = document.createElement('img'); // фото фотокарточки
-  const PhotoCard_info = document.createElement('div'); // блок информации фотокарточки
-  const PhotoCard_title = document.createElement('h2'); // имя фотокарточки
-  const PhotoCard_btnLike = document.createElement('button'); // кнопка Like
-  const PhotoCard_btnDelete = document.createElement('button'); // кнопка Delete
-
-  // добавление классов для созданных элементов
-  PhotoCard.classList.add('element');
-  PhotoCard_img.classList.add('element__img');
-  PhotoCard_info.classList.add('element__section-info');
-  PhotoCard_title.classList.add('element__title');
-  PhotoCard_btnLike.classList.add('element__btn-like');
-  PhotoCard_btnDelete.classList.add('element__btn-delete');
-
-  // добавление текста для имени фотокарточки
-  PhotoCard_title.textContent = name;
-
-  // добавление атрбутов для созданных элементов
-  PhotoCard_img.setAttribute('src', link);
-  PhotoCard_img.setAttribute('alt', name);
-  PhotoCard_btnLike.setAttribute('aria-label', 'Нравится');
-  PhotoCard_btnLike.setAttribute('type', 'button');
-  PhotoCard_btnDelete.setAttribute('aria-label', 'Удалить');
-  PhotoCard_btnDelete.setAttribute('type', 'button');
-
-  // добавление элементов друг в друга
-  PhotoCard_info.prepend(PhotoCard_title, PhotoCard_btnLike);
-  PhotoCard.prepend(PhotoCard_btnDelete, PhotoCard_img, PhotoCard_info);
-
-  // добавление тригера на нажатие кнопки Like
-  PhotoCard_btnLike.addEventListener('click', evt => {
-    PhotoCard_btnLike.classList.toggle('element__btn-like_active');
+// Массиы всех popup-ов
+const popups = document.querySelectorAll('.popup');
+// Для каждого popup-а добавление тригера на закрвтие
+popups.forEach(item => {
+  const closeBtn = item.querySelector('.popup__btn-close');
+  closeBtn.addEventListener('click', evt => {
+    closePopup(item);
   });
-
-  // добавление тригера на нажатие кнопки Delete
-  PhotoCard_btnDelete.addEventListener('click', evt => {
-    // удаление фотокарточки
-    PhotoCard.remove();
-    // удаление данных из массива
-    const indexDeleteItem = initialCards.findIndex(element => ((element.link === link) && (element.name === name)));
-    initialCards.splice(indexDeleteItem, 1);
-  });
-
-  // добавление тригера на нажатие изображения
-  PhotoCard_img.addEventListener('click', evt => {
-    const img = arr_popups[2].querySelector('.figure-img__img');
-    const caption = arr_popups[2].querySelector('.figure-img__caption');
-    img.setAttribute('src', link);
-    img.setAttribute('alt', name);
-    caption.textContent = name;
-    openPopup(arr_popups[2]);
-  });
-
-  return PhotoCard;
-}
-
-// Массив Popup-ов, где Popup[0] -> popup редактирования профиля; Popup[1] -> popup создание фотокарточки;
-// Popup[2] -> popup изображения фотокарточки
-const arr_popups = document.querySelectorAll('.popup');
-
-arr_popups.forEach((popup, index) => {
-  // конпка закрытия Popup
-  const btn_close = popup.querySelector('.popup__btn-close');
-
-  // добавление тригера на нажатие кнопки закрытия Popup
-  btn_close.addEventListener('click', evt => {
-    // закртыие Popup
-    closePopup(popup);
-    if (index !== 2) {
-      const formPopup = popup.querySelector('.form-edit');
-      // сброс формы Popup
-      formPopup.reset();
-    }    
-  });
-  if (index !== 2) {
-    const formPopup = popup.querySelector('.form-edit');
-    // добавление тригера на submit формы Popup
-    formPopup.addEventListener('submit', evt => {
-      evt.preventDefault();
-
-      if (index === 0) {
-        const popup_name = formPopup.querySelector('#name');
-        const popup_subtitle = formPopup.querySelector('#subtitle');
-        handleFormSubmitEditProfile(popup_name.value, popup_subtitle.value);        
-      }
-      if (index === 1) {
-        const nameCard = formPopup.querySelector('#name');
-        const linkCard = formPopup.querySelector('#link');
-
-        const newCard = handleFormSubmitCreateCard(nameCard.value, linkCard.value);
-
-        sectionCards.prepend(newCard);
-      }
-      // закртыие Popup
-      closePopup(popup);
-
-      // сброс формы Popup
-      formPopup.reset();
-    });
-  }
 });
 
-// Кнопка редактирования профиля
-const editProfile_btn = document.querySelector('.profile__btn-edit');
-// добавление тригера на нажатие кнопки редактирования профиля
-editProfile_btn.addEventListener('click', evt => {
-  arr_popups[0].querySelector('#name').value = document.querySelector('.profile__name').textContent;
-  arr_popups[0].querySelector('#subtitle').value = document.querySelector('.profile__subtitle').textContent;
-  openPopup(arr_popups[0]);
+// Popup редактирования профиля
+const editProfilePopup = document.querySelector('.popup.profile-popup');
+// Форма -> входные данные имени профиля
+const inputNameProfile = editProfilePopup.querySelector('input#name');
+// Форма -> входные данные описания профиля
+const inputSubtitleProfile = editProfilePopup.querySelector('input#subtitle');
+// Никнейм профиля
+const nameProfile = document.querySelector('.profile__name');
+// Описание профиля
+const subtitleProfile = document.querySelector('.profile__subtitle');
+
+// Тригер нажатия кнопки редактирования профиля
+document.querySelector('.profile__btn-edit').addEventListener('click', evt => {
+  inputNameProfile.value = nameProfile.textContent;
+  inputSubtitleProfile.value = subtitleProfile.textContent;
+  openPopup(editProfilePopup);
 });
 
-// Кнопка создания карточки 
-const createCard_btn = document.querySelector('.profile__btn-create-card');
-// добавление тригера на нажатие кнопки создания карточки 
-createCard_btn.addEventListener('click', evt => {
-  openPopup(arr_popups[1]);
+// Кнопка submit редактирования профиля
+const submitProfileBtn = editProfilePopup.querySelector('.form-edit__submit');
+// Тригер нажатия кнопки submit редактирования профиля
+submitProfileBtn.addEventListener('click', evt => {
+  evt.preventDefault();
+
+  nameProfile.textContent = inputNameProfile.value;
+  subtitleProfile.textContent = inputSubtitleProfile.value;
+
+  closePopup(editProfilePopup);
+  editProfilePopup.querySelector('.form-edit').reset();
+});
+
+// Popup создания фотокарточки
+const createCardPopup = document.querySelector('.popup.card-popup');
+// Тригер нажатия кнопки создания фотокарточки
+document.querySelector('.profile__btn-create-card').addEventListener('click', evt => {
+  openPopup(createCardPopup);
+});
+
+// Форма -> входные данные названия фотокарточки
+const inputNameCard = createCardPopup.querySelector('input#name');
+// Форма -> входные данные ссылки изображения фотокарточки
+const inputLinkCard = createCardPopup.querySelector('input#link');
+// Шаблон фотокарточки
+const cardsPhoto = document.querySelector('.elements');
+
+// Popup изображения
+const openImgPopup = document.querySelector('.popup.image-popup');
+
+function createPhotoCard(name, link) {
+  const newPhotoCard = document.createElement('article');
+  newPhotoCard.classList.add('element');
+
+  newPhotoCard.append(document.querySelector('#card').content.cloneNode(true));
+
+  const imgPhotoCard = newPhotoCard.querySelector('.element__img');
+  imgPhotoCard.src = link;
+  imgPhotoCard.alt = name;
+
+  newPhotoCard.querySelector('.element__title').textContent = name;  
+
+  const likeCardBtn = newPhotoCard.querySelector('.element__btn-like');
+  likeCardBtn.addEventListener('click', evt => {
+    likeCardBtn.classList.toggle('element__btn-like_active');
+  });
+
+  newPhotoCard.querySelector('.element__btn-delete').addEventListener('click', evt => {
+    newPhotoCard.remove();
+  });
+
+  imgPhotoCard.addEventListener('click', evt => {
+    openPopup(openImgPopup);
+
+    openImgPopup.querySelector('.figure-img__img').src = link;
+    openImgPopup.querySelector('.figure-img__img').alt = name;
+    openImgPopup.querySelector('.figure-img__caption').textContent = name;
+  });
+
+  return newPhotoCard;
+}
+
+// Тригер нажатия кнопки submit создания фотокарточки
+createCardPopup.querySelector('.form-edit__submit').addEventListener('click', evt => {
+  evt.preventDefault();
+
+  cardsPhoto.prepend(createPhotoCard(inputNameCard.value, inputLinkCard.value));
+
+  closePopup(createCardPopup);
+  createCardPopup.querySelector('.form-edit').reset();
 });
 
 // Массив объектов информации фотокарточек
@@ -189,11 +136,6 @@ const initialCards = [
   }
 ];
 
-// Выбор секции фотокарточек
-const sectionCards = document.querySelector('.elements');
-
-// Для каждого объекта массива создать фотокарточку
-initialCards.forEach(card => {
-  const PhotoCard = createCard(card.name, card.link);
-  sectionCards.prepend(PhotoCard);  
+initialCards.forEach(item => {
+  cardsPhoto.prepend(createPhotoCard(item.name, item.link));
 });
