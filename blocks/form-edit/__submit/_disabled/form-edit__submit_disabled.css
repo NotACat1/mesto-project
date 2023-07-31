@@ -1,0 +1,6 @@
+.form-edit__submit_disabled {
+  cursor: default;
+  background-color: #00000000;
+  border: rgba(0, 0, 0, .2) solid 2px;
+  color: rgba(0, 0, 0, .2);
+}

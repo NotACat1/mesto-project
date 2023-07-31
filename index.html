@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
   <!-- favicon -->
-  <link rel="apple-touch-icon" href="./images/favicon/apple-touch-icon.png">
-  <link rel="icon" href="./images/favicon/favicon.ico" sizes="16x16" type="image/x-icon">
-  <link rel="manifest" href="./images/favicon/manifest.json">
-  <link rel="yandex-tableau-widget" href="./images/favicon/tableau.json">
+  <link rel="apple-touch-icon" href="<%=require('./images/favicon/apple-touch-icon.png')%>">
+  <link rel="icon" href="<%=require('./images/favicon/favicon.ico')%>" sizes="16x16" type="image/x-icon">
+  <link rel="manifest" href="<%=require('./images/favicon/manifest.json')%>">
+  <link rel="yandex-tableau-widget" href="<%=require('./images/favicon/tableau.json')%>">
 
   <!-- Метатеги для браузера -->
   <meta name="description" content="Сервис Mesto: интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки.">
@@ -26,17 +26,14 @@
   <meta property="og:locale" content="ru_RU">
 
   <title>Mesto</title>
-
-  <!-- Подключение таблиц стилей страницы -->
-  <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="page">
   <header class="header">
-    <img src="./images/logo-white.svg" alt="Логотип Mesto" class="header__logo">
+    <img src="<%=require('./images/logo-white.svg')%>" alt="Логотип Mesto" class="header__logo">
   </header>
   <main>
     <section class="profile">
-      <img src="./images/avatar.jpg" alt="Аватар Жак-Ив Кусто" class="profile__avatar">
+      <img src="<%=require('./images/avatar.jpg')%>" alt="Аватар Жак-Ив Кусто" class="profile__avatar">
       <div class="profile__section-info">
         <h1 class="profile__name">Жак-Ив Кусто</h1>
         <p class="profile__subtitle">Исследователь океана</p>
@@ -54,26 +51,30 @@
   <div class="popup profile-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form method="get" name="form-edit" class="form-edit">
+      <form name="form-edit" class="form-edit" novalidate>
         <h2 class="form-edit__title">Редактировать профиль</h2>
         <fieldset class="form-edit__section">
-          <input class="form-edit__input" type="text" id="name" name="name" value="Жак-Ив Кусто">
-          <input class="form-edit__input" type="text" id="subtitle" name="subtitle" value="Исследователь океана">
+          <input class="form-edit__input" type="text" id="nickname" name="nickname" value="Жак-Ив Кусто" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+          <span class="form-edit__input-error nickname-input-error"></span>
+          <input class="form-edit__input" type="text" id="subtitle" name="subtitle" value="Исследователь океана" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+          <span class="form-edit__input-error subtitle-input-error"></span>
         </fieldset>
-        <input class="form-edit__submit" type="submit" value="Сохранить">
+        <button class="form-edit__submit" type="submit">Сохранить</button>
       </form>
     </div>
   </div>
   <div class="popup card-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form method="get" name="form-edit" class="form-edit">
+      <form name="form-edit" class="form-edit" novalidate>
         <h2 class="form-edit__title">Новое место</h2>
         <fieldset class="form-edit__section">
-          <input class="form-edit__input" type="text" id="name" name="name" placeholder="Назание">
-          <input class="form-edit__input" type="text" id="link" name="link" placeholder="Ссылка на картинку">
+          <input class="form-edit__input" type="text" id="name" name="name" placeholder="Назание" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
+          <span class="form-edit__input-error name-input-error"></span>
+          <input class="form-edit__input" type="url" id="link" name="link" placeholder="Ссылка на картинку" required>
+          <span class="form-edit__input-error link-input-error"></span>
         </fieldset>
-        <input class="form-edit__submit" type="submit" value="Сохранить">
+        <button class="form-edit__submit" type="submit">Сохранить</button>
       </form>
     </div>
   </div>
@@ -93,7 +94,6 @@
       <h2 class="element__title"></h2>
       <button class="element__btn-like" aria-label="Нравится" type="button"></button>
     </div>
-  </template>   
-  <script src="./main.js"></script>
+  </template>
 </body>
 </html>

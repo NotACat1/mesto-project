@@ -5,13 +5,13 @@
 [Mesto](https://notacat1.github.io/mesto-project/) - это блог, где с помощью магии JS можно создавать фотокарточки, демонстрируя остальным пользователям интересные места.
 ____
 
-## Описание проекта:
+## Описание проекта
 
 Создание площадки, на которой можно выкладывать фотографии с интересными местами, реализовав проект с помощью JS, HTML5, CSS3.
 
 ____
 
-## Реализованный функционал:
+## Реализованный функционал
 
 ### 1. Favicon
 
@@ -202,10 +202,140 @@ ____
 
 ![Открытие попапа с картинкой](https://ie.wampi.ru/2023/06/20/project-5-05-image.gif)
 
+### 12. Валидация форм
+
+**Валидация на стороне клиента** — это первичная проверка введённых данных, которая существенно улучшает удобство взаимодействия с интерфейсом; обнаружение некорректных данных на стороне клиента позволяет пользователю немедленно их исправить. Если же проверка происходит только на сервере, процесс заполнения может быть более трудоёмким, так как требует повторения одних и тех же действий отправки данных на сервер для получения обратного ответа с сообщением о том, что нужно исправить.
+
+![Валидация форм](https://s12.gifyu.com/images/Scq9z.gif)
+
+### 13. Закрытие попапа кликом на оверлей или нажатием на Esc
+
+```js
+// Для каждого popup-а добавление тригера на закрытие
+popups.forEach(item => {
+  const form = item.querySelector('form');
+  item.addEventListener('keydown', evt => {
+    if (evt.key === 'Esc') {
+      closePopup(item);
+    }
+  });
+  item.addEventListener('click', evt => {
+    if (evt.target.classList.contains('popup__btn-close') || evt.target.classList.contains('popup')) {
+      closePopup(item);
+    }
+    if (form) {
+      form.reset();
+    }
+  });
+});
+```
+
 ____
 
-## Используемые технологии:
+## Используемые технологии
 
 ### 1. Normalize.css
 
-Normalize.css позволяет браузерам отображать все элементы более последовательно и в соответствии с современными стандартами. Он точно нацелен только на те стили, которые нуждаются в нормализации.
+**Normalize.css** позволяет браузерам отображать все элементы более последовательно и в соответствии с современными стандартами. Он точно нацелен только на те стили, которые нуждаются в нормализации.
+
+### 2. Webpack
+
+**Webpack** — это сборщик модулей для `JavaScript-приложений`. Он позволяет разделять код на модули, которые затем могут быть импортированы и использованы в других частях приложения. Это полезно для структурирования кода, оптимизации производительности и поддержки сторонних библиотек.
+
+```js
+// webpack.config.js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  entry: {
+    main: './src/index.js'
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js',
+    publicPath: '',
+  },
+  mode: 'development',
+  devServer: {
+    static: path.resolve(__dirname, './dist'),
+    open: true,
+    compress: true,
+    port: 8080
+  },
+  module: {
+    rules: [{
+        test: /\.js$/,
+        use: 'babel-loader',
+        exclude: '/node_modules/'
+      },
+      {
+        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf|ico)$/,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          'postcss-loader'
+        ]
+      },
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    }),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
+  ],
+  stats: {
+    children: true
+  }
+} 
+```
+
+### 2.1 Babel
+
+**Babel** - бесплатный транскомпилятор `JavaScript` с открытым исходным кодом, который в основном используется для преобразования кода `ECMAScript 2015+` в обратно совместимый код `JavaScript`, который может выполняться старыми движками `JavaScript`. Это позволяет веб-разработчикам использовать новейшие возможности языка.
+
+```js
+// babel.config.js
+const presets = [
+  ['@babel/preset-env', {
+    targets: {
+      edge: '17',
+      ie: '11',
+      firefox: '50',
+      chrome: '64',
+      safari: '11.1'
+    },
+    useBuiltIns: "entry"
+  }]
+];
+
+module.exports = { presets }; 
+```
+
+### 2.2 PostCSS
+
+**PostCSS** — это инструмент, который позволяет преобразовывать `CSS` с помощью плагинов. Его выпустили в 2013 году, и сейчас он существует в 7 версии. Он не добавляет новый синтаксис, как `Sass` или `Less`, но предоставляет возможность модифицировать `CSS` с помощью `JavaScript-плагинов`.
+
+```js
+// postcss.config.js
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+
+module.exports = {
+  plugins: [
+    autoprefixer,
+    cssnano({ preset: 'default' })
+  ]
+}; 
+```
