@@ -1,30 +1,38 @@
-// Popup редактирования профиля
-const editProfilePopup = document.querySelector('.popup.profile-popup');
-// Popup создания фотокарточки
-const createCardPopup = document.querySelector('.popup.card-popup');
-// Popup изображения
-const imgPopup = document.querySelector('.popup.image-popup');
-// Изображение в imgPopup
-const imgFigurePopup = imgPopup.querySelector('.figure-img__img');
-// Название в imgPopup
-const captionImgPopup = imgPopup.querySelector('.figure-img__caption');
+const popupFigure = document.querySelector('.popup.image-popup');
+const imgFigure = popupFigure.querySelector('.figure-img__img');
+const captionFigure = popupFigure.querySelector('.figure-img__caption');
 
-// Открытие popup
 function openPopup(popup) {
+  document.addEventListener('keydown', closeByEsc);
+  document.addEventListener('mousedown', closeByOverlay);
   popup.classList.add('popup_opened');
 }
 
-// Закрытие popup
 function closePopup(popup) {
+  document.removeEventListener('keydown', closeByEsc);
+  document.addEventListener('mousedown', closeByOverlay);
   popup.classList.remove('popup_opened');
 }
 
-// Открытие popup с изображением
-function openImgPopup(name, link, open) { 
-  imgFigurePopup.src = link;
-  imgFigurePopup.alt = name;
-  captionImgPopup.textContent = name;
-  imgFigurePopup.onload = open;
+function closeByEsc(evt) {
+  const popup = document.querySelector('.popup.popup_opened');
+  if (evt.key === 'Escape' && popup) {
+    closePopup(popup);
+  }
 }
 
-export {openPopup, closePopup, openImgPopup, editProfilePopup, createCardPopup, imgPopup};
+function closeByOverlay(evt) {
+  const popup = document.querySelector('.popup.popup_opened');
+  if (evt.target.classList.contains('popup_opened')) {
+    closePopup(popup);
+  }
+}
+
+function openPopupFigure(name, link) {
+  imgFigure.alt = name;
+  imgFigure.src = link;
+  captionFigure.textContent = name;
+  imgFigure.onload = () => { openPopup(popupFigure); };
+}
+
+export {openPopup, closePopup, openPopupFigure};

@@ -1,27 +1,48 @@
-function hideInputError(formElement, inputElement) {
+function enableValidation(settings) {
+  const arrForms = Array.from(document.querySelectorAll(settings.formSelector));
+  arrForms.forEach(formElement => {
+    setEventListeners(formElement, settings);    
+  });
+}
+
+function setEventListeners(formElement, settings) {
+  const arrInputs = Array.from(formElement.querySelectorAll(settings.inputSelector));
+  const btnSubmit = formElement.querySelector(settings.submitButtonSelector);
+  toggleButtonState(arrInputs, btnSubmit, settings.inactiveButtonClass);
+  arrInputs.forEach(inputItem => {
+    inputItem.addEventListener('input', () => {
+      isValid(formElement, inputItem, settings);
+    });
+  });  
+  formElement.addEventListener('input', () => {
+    toggleButtonState(arrInputs, btnSubmit, settings);
+  });
+}
+
+function hideInputError(formElement, inputElement, settings) {
   const spanError = formElement.querySelector(`.${inputElement.id}-input-error`);
-  inputElement.classList.remove('form-edit__input_error');  
-  spanError.classList.remove('form-edit__input-error_active');
+  inputElement.classList.remove(settings.inputErrorClass);  
+  spanError.classList.remove(settings.errorClass);
   spanError.textContent = '';
 }
 
-function showInputError(formElement, inputElement, messageError) {
+function showInputError(formElement, inputElement, messageError, settings) {
   const spanError = formElement.querySelector(`.${inputElement.id}-input-error`);
-  inputElement.classList.add('form-edit__input_error');
+  inputElement.classList.add(settings.inputErrorClass);
   spanError.textContent = messageError;
-  spanError.classList.add('form-edit__input-error_active');  
+  spanError.classList.add(settings.errorClass);  
 }
 
-function isValid(formElement, inputElement) {
+function isValid(formElement, inputElement, settings) {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
     inputElement.setCustomValidity('');
   }
   if (inputElement.validity.valid) {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, settings);
   } else {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage, settings);
   }
 }
 
@@ -29,46 +50,23 @@ function hasInvalid(arrInputs) {
   return arrInputs.some((inputElement) => !inputElement.validity.valid);
 }
 
-function toggleButtonState(arrInputs, btnSub) {
+function toggleButtonState(arrInputs, btnSub, settings) {
   if (hasInvalid(arrInputs)) {
-    btnSub.classList.add('form-edit__submit_disabled');
+    btnSub.classList.add(settings.inactiveButtonClass);
     btnSub.disabled = true;
   } else {
-    btnSub.classList.remove('form-edit__submit_disabled');
+    btnSub.classList.remove(settings.inactiveButtonClass);
     btnSub.disabled = false;
   }
 }
 
-// Валидация формы
-function setEventListeners(formElement) {
-  const arrInputItems = Array.from(formElement.querySelectorAll('input.form-edit__input'));
-  const btnSub = formItem.querySelector('.form-edit__submit');
-  toggleButtonState(arrInputItems, btnSub);
-  arrInputItems.forEach(inputItem => {
-    inputItem.addEventListener('input', () => {
-      isValid(formItem, inputItem);
-    });
-  });  
-  formItem.addEventListener('input', () => {
-    toggleButtonState(arrInputItems, btnSub);
+function resetForm(formElement) {
+  const arrInputsForm = Array.from(formElement.querySelectorAll('.form-edit__input'));
+  console.log(arrInputsForm);
+  arrInputsForm.forEach(inputItem => {
+    hideInputError(formElement, inputItem, settings);
   });
-}; 
+  formElement.reset();
+}
 
-function enableValidation() {
-  const formList = Array.from(document.querySelectorAll('form'));
-  formList.forEach((formElement) => {
-    const arrInputItems = Array.from(formElement.querySelectorAll('input.form-edit__input'));
-    const btnSub = formElement.querySelector('.form-edit__submit');
-    toggleButtonState(arrInputItems, btnSub);
-    arrInputItems.forEach(inputItem => {
-      inputItem.addEventListener('input', () => {
-        isValid(formElement, inputItem);
-      });
-    });  
-    formElement.addEventListener('input', () => {
-      toggleButtonState(arrInputItems, btnSub);
-    });
-  });
-};
-
-export {hideInputError, showInputError, isValid, hasInvalid, toggleButtonState, setEventListeners, enableValidation};
+export {resetForm, enableValidation};

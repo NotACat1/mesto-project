@@ -1,10 +1,9 @@
 import '../pages/index.css';
+import {submitNewCard, btnsPhotoCards} from './card.js';
+import {openPopup, closePopup} from './popup.js';
+import {nameProfile, subtitleProfile, submitProfile} from './profile.js';
+import {resetForm, enableValidation} from './validate.js';
 
-import {createPhotoCard} from './card.js';
-import {openPopup, closePopup, openImgPopup, editProfilePopup, createCardPopup, imgPopup} from './popup.js';
-import {enableValidation} from './validate.js';
-
-// Массив объектов информации фотокарточек
 const initialCards = [
   {
     name: 'Архыз',
@@ -32,98 +31,57 @@ const initialCards = [
   }
 ];
 
-// Контейнер для фотокарточек
-const cardsPhoto = document.querySelector('.elements');
-// Массиы всех popup-ов
-const popups = document.querySelectorAll('.popup');
-// Форма отправки редактирования профиля
-const editFormPopup = editProfilePopup.querySelector('.form-edit');
-// Кнопка submit редактирования профиля
-const submitProfileBtn = editProfilePopup.querySelector('.form-edit__submit');
-// Никнейм профиля
-const nameProfile = document.querySelector('.profile__name');
-// Описание профиля
-const subtitleProfile = document.querySelector('.profile__subtitle');
-// Форма -> входные данные имени профиля
-const inputNameProfile = editProfilePopup.querySelector('input#nickname');
-// Форма -> входные данные описания профиля
-const inputSubtitleProfile = editProfilePopup.querySelector('input#subtitle');
-// Форма -> входные данные названия фотокарточки
-const inputNameCard = createCardPopup.querySelector('input#name');
-// Форма -> входные данные ссылки изображения фотокарточки
-const inputLinkCard = createCardPopup.querySelector('input#link');
-// Форма отправки создания фотокарточки
-const createFormPopup = createCardPopup.querySelector('.form-edit');
+const settings = {
+  formSelector: '.form-edit',
+  inputSelector: '.form-edit__input',
+  submitButtonSelector: '.form-edit__submit',
+  inactiveButtonClass: 'form-edit__submit_disabled',
+  inputErrorClass: 'form-edit__input_error',
+  errorClass: 'form-edit__input-error_active'
+};
+
+
+const editProfilePopup = document.querySelector('.popup.profile-popup');
+const createCardPopup = document.querySelector('.popup.card-popup');
+const elementsCards = document.querySelector('.elements');
+const inputNameProfile = document.querySelector('.form-edit__input#nickname');
+const inputSubtitleProfile = document.querySelector('.form-edit__input#subtitle');
+const namePhotoCard = document.querySelector('.form-edit__input#name');
+const linkPhotoCard = document.querySelector('.form-edit__input#link');
 
 initialCards.forEach(card => {
-  cardsPhoto.prepend(createPhotoCard(card.name, card.link));
+  submitNewCard(card.name, card.link, elementsCards)
 });
 
-// Общие триггеры для всех фотокарточек
-cardsPhoto.addEventListener('click', evt => {
-  // триггер лайка фотокарточки
-  if (evt.target.classList.contains('element__btn-like')) {
-    evt.target.classList.toggle('element__btn-like_active');
+document.addEventListener('click', evt => {
+  const element = evt.target;
+  const popup = element.closest('.popup');
+  const form = popup? popup.querySelector('.form-edit'): null;
+  if (element.classList.contains('profile__btn-edit')) {
+    inputNameProfile.value = nameProfile.textContent;
+    inputSubtitleProfile.value = subtitleProfile.textContent;
+    openPopup(editProfilePopup);
   }
-  // триггер удаления фотокарточки
-  if (evt.target.classList.contains('element__btn-delete')) {
-    evt.target.closest('.element').remove();
+  if (element.classList.contains('profile__btn-create-card')) {
+    openPopup(createCardPopup);
   }
-  // триггер открытия popup изображения фотокарточки
-  if (evt.target.classList.contains('element__img')) {
-    openImgPopup(evt.target.closest('.element').querySelector('.element__title').textContent, evt.target.src, openPopup(imgPopup));
+  if (element.classList.contains('popup__btn-close')) {
+    closePopup(popup);
+    resetForm(form);
   }
-});
-
-// Тригер нажатия кнопки создания фотокарточки
-document.querySelector('.profile__btn-create-card').addEventListener('click', evt => {
-  openPopup(createCardPopup);
-});
-
-// Тригер нажатия кнопки submit создания фотокарточки
-createCardPopup.querySelector('.form-edit__submit').addEventListener('click', evt => {
-  evt.preventDefault();
-
-  cardsPhoto.prepend(createPhotoCard(inputNameCard.value, inputLinkCard.value));
-
-  closePopup(createCardPopup);
-  createFormPopup.reset();
-});
-
-// Тригер нажатия кнопки редактирования профиля
-document.querySelector('.profile__btn-edit').addEventListener('click', evt => {
-  inputNameProfile.value = nameProfile.textContent;
-  inputSubtitleProfile.value = subtitleProfile.textContent;
-  openPopup(editProfilePopup);
-});
-
-// Тригер нажатия кнопки submit редактирования профиля
-submitProfileBtn.addEventListener('click', evt => {
-  evt.preventDefault();
-
-  nameProfile.textContent = inputNameProfile.value;
-  subtitleProfile.textContent = inputSubtitleProfile.value;
-
-  closePopup(editProfilePopup);
-  editFormPopup.reset();
-});
-
-// Для каждого popup-а добавление тригера на закрытие
-popups.forEach(item => {
-  const form = item.querySelector('form');
-  item.addEventListener('keydown', evt => {
-    if (evt.key === 'Esc') {
-      closePopup(item);
+  if (element.classList.contains('form-edit__submit')) {
+    evt.preventDefault();
+    if (popup.classList.contains('profile-popup')) {
+      submitProfile(inputNameProfile.value, inputSubtitleProfile.value);
     }
-  });
-  item.addEventListener('click', evt => {
-    if (evt.target.classList.contains('popup__btn-close') || evt.target.classList.contains('popup')) {
-      closePopup(item);
-    }
-    if (form) {
+    if (popup.classList.contains('card-popup')) {
+      submitNewCard(namePhotoCard.value, linkPhotoCard.value, elementsCards);     
       form.reset();
     }
-  });
+    closePopup(popup);
+  }
 });
 
-enableValidation();
+enableValidation(settings); 
+
+elementsCards.addEventListener('click', btnsPhotoCards);
