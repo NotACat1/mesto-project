@@ -8,7 +8,7 @@ function enableValidation(settings) {
 function setEventListeners(formElement, settings) {
   const arrInputs = Array.from(formElement.querySelectorAll(settings.inputSelector));
   const btnSubmit = formElement.querySelector(settings.submitButtonSelector);
-  toggleButtonState(arrInputs, btnSubmit, settings.inactiveButtonClass);
+  toggleButtonState(arrInputs, btnSubmit, settings);
   arrInputs.forEach(inputItem => {
     inputItem.addEventListener('input', () => {
       isValid(formElement, inputItem, settings);
@@ -60,13 +60,14 @@ function toggleButtonState(arrInputs, btnSub, settings) {
   }
 }
 
-function resetForm(formElement) {
-  const arrInputsForm = Array.from(formElement.querySelectorAll('.form-edit__input'));
-  console.log(arrInputsForm);
+function resetForm(formElement, settings) {
+  const arrInputsForm = [...formElement.querySelectorAll(settings.inputSelector)];
+  const btnSubmit = formElement.querySelector(settings.submitButtonSelector);
   arrInputsForm.forEach(inputItem => {
     hideInputError(formElement, inputItem, settings);
   });
   formElement.reset();
+  toggleButtonState(arrInputsForm, btnSubmit, settings);  
 }
 
 export {resetForm, enableValidation};

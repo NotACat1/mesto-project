@@ -67,7 +67,7 @@ document.addEventListener('click', evt => {
   }
   if (element.classList.contains('popup__btn-close')) {
     closePopup(popup);
-    resetForm(form);
+    if (form) resetForm(form, settings);
   }
   if (element.classList.contains('form-edit__submit')) {
     evt.preventDefault();
@@ -76,8 +76,8 @@ document.addEventListener('click', evt => {
     }
     if (popup.classList.contains('card-popup')) {
       submitNewCard(namePhotoCard.value, linkPhotoCard.value, elementsCards);     
-      form.reset();
     }
+    resetForm(form, settings);
     closePopup(popup);
   }
 });
