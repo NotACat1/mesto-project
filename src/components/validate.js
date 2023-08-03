@@ -60,14 +60,4 @@ function toggleButtonState(arrInputs, btnSub, settings) {
   }
 }
 
-function resetForm(formElement, settings) {
-  const arrInputsForm = [...formElement.querySelectorAll(settings.inputSelector)];
-  const btnSubmit = formElement.querySelector(settings.submitButtonSelector);
-  arrInputsForm.forEach(inputItem => {
-    hideInputError(formElement, inputItem, settings);
-  });
-  formElement.reset();
-  toggleButtonState(arrInputsForm, btnSubmit, settings);  
-}
-
-export {resetForm, enableValidation};
+export {enableValidation};

@@ -1,10 +1,7 @@
 import {openPopupFigure} from './popup.js';
 
 function createPhotoCard(name, link) {
-  const newPhotoCard = document.createElement('article');
-  newPhotoCard.classList.add('element');
-
-  newPhotoCard.append(document.querySelector('#card').content.cloneNode(true));
+  const newPhotoCard = document.querySelector('#card').content.cloneNode(true);
 
   const imgPhotoCard = newPhotoCard.querySelector('.element__img');
   imgPhotoCard.src = link;
@@ -22,11 +19,11 @@ function deletePhotoCard(card) {
   card.remove();
 }
 
-function submitNewCard(name, link, element) {
+function addNewCard(name, link, element) {
   element.prepend(createPhotoCard(name, link));
 }
 
-function btnsPhotoCards(evt) {
+function listenBtnsCard(evt) {
   const elementPhotoCard = evt.target.closest('.element');
   if (evt.target.classList.contains('element__btn-like')) {
     likePhotoCard(evt.target);
@@ -41,4 +38,4 @@ function btnsPhotoCards(evt) {
   }
 }
 
-export {submitNewCard, btnsPhotoCards};
+export {addNewCard, listenBtnsCard};

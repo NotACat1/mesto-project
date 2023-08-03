@@ -51,7 +51,7 @@
   <div class="popup profile-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="form-edit" class="form-edit" novalidate>
+      <form name="formEdit" class="form-edit" novalidate>
         <h2 class="form-edit__title">Редактировать профиль</h2>
         <fieldset class="form-edit__section">
           <input class="form-edit__input" type="text" id="nickname" name="nickname" value="Жак-Ив Кусто" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
@@ -66,7 +66,7 @@
   <div class="popup card-popup">
     <div class="popup__container popup__container_box-shadow">
       <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="form-edit" class="form-edit" novalidate>
+      <form name="createCard" class="form-edit" novalidate>
         <h2 class="form-edit__title">Новое место</h2>
         <fieldset class="form-edit__section">
           <input class="form-edit__input" type="text" id="name" name="name" placeholder="Назание" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
@@ -88,12 +88,15 @@
     </div>
   </div>
   <template id="card">
-    <button class="element__btn-delete" aria-label="Удалить" type="button"></button>
-    <img class="element__img" alt="" src="">
-    <div class="element__section-info">
-      <h2 class="element__title"></h2>
-      <button class="element__btn-like" aria-label="Нравится" type="button"></button>
-    </div>
+    <article class="element">
+      <button class="element__btn-delete" aria-label="Удалить" type="button"></button>
+      <img class="element__img" alt="" src="">
+      <div class="element__section-info">
+        <h2 class="element__title"></h2>
+        <button class="element__btn-like" aria-label="Нравится" type="button"></button>
+      </div>
+    </article>
+    
   </template>
 </body>
 </html>
