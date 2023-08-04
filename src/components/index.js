@@ -2,7 +2,7 @@ import '../pages/index.css';
 import {addNewCard, listenBtnsCard} from './card.js';
 import {openPopup, closePopup} from './popup.js';
 import {nameProfile, subtitleProfile, submitProfile} from './profile.js';
-import {resetForm, enableValidation} from './validate.js';
+import {enableValidation} from './validate.js';
 
 const initialCards = [
   {
@@ -50,24 +50,24 @@ const inputNameProfile = document.querySelector('.form-edit__input#nickname');
 const inputSubtitleProfile = document.querySelector('.form-edit__input#subtitle');
 const namePhotoCard = document.querySelector('.form-edit__input#name');
 const linkPhotoCard = document.querySelector('.form-edit__input#link');
+const btnProfileEdit = document.querySelector('.profile__btn-edit');
+const btnCreateCard = document.querySelector('.profile__btn-create-card');
+const btnsClosePopup = document.querySelectorAll('.popup__btn-close');
 
 initialCards.forEach(card => {
   addNewCard(card.name, card.link, elementsCards)
 });
 
-const btnProfileEdit = document.querySelector('.profile__btn-edit');
 btnProfileEdit.addEventListener('click', evt => {
   inputNameProfile.value = nameProfile.textContent;
   inputSubtitleProfile.value = subtitleProfile.textContent;
   openPopup(editProfilePopup);
 });
 
-const btnCreateCard = document.querySelector('.profile__btn-create-card');
 btnCreateCard.addEventListener('click', evt => {
   openPopup(createCardPopup);
 });
 
-const btnsClosePopup = document.querySelectorAll('.popup__btn-close');
 [...btnsClosePopup].forEach(btnClosePopup => {
   const popup = btnClosePopup.closest('.popup');
   btnClosePopup.addEventListener('click', () => {
@@ -84,6 +84,7 @@ editProfileForm.addEventListener('submit', evt => {
 createCardForm.addEventListener('submit', evt => {
   evt.preventDefault();
   addNewCard(namePhotoCard.value, linkPhotoCard.value, elementsCards);  
+  evt.target.reset();
   closePopup(createCardPopup);
 });
 

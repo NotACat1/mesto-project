@@ -9,6 +9,9 @@ function setEventListeners(formElement, settings) {
   const arrInputs = Array.from(formElement.querySelectorAll(settings.inputSelector));
   const btnSubmit = formElement.querySelector(settings.submitButtonSelector);
   toggleButtonState(arrInputs, btnSubmit, settings);
+  formElement.addEventListener('reset', () => {
+    disableButton(btnSubmit, settings);
+  });
   arrInputs.forEach(inputItem => {
     inputItem.addEventListener('input', () => {
       isValid(formElement, inputItem, settings);
@@ -52,12 +55,16 @@ function hasInvalid(arrInputs) {
 
 function toggleButtonState(arrInputs, btnSub, settings) {
   if (hasInvalid(arrInputs)) {
-    btnSub.classList.add(settings.inactiveButtonClass);
-    btnSub.disabled = true;
+    disableButton(btnSub, settings);
   } else {
     btnSub.classList.remove(settings.inactiveButtonClass);
     btnSub.disabled = false;
   }
+}
+
+function disableButton(btnSubmit, settings) {
+  btnSubmit.classList.add(settings.inactiveButtonClass);
+  btnSubmit.disabled = true;
 }
 
 export {enableValidation};
