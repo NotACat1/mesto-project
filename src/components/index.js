@@ -49,7 +49,7 @@ const btnProfileEdit = document.querySelector('.profile__btn-edit');
 const btnCreateCard = document.querySelector('.profile__btn-create-card');
 const btnsClosePopup = document.querySelectorAll('.popup__btn-close');
 
-let myInfo = await getMyInfo(config);
+let myInfo;
 
 changeAvatarProfile.addEventListener('click', evt => {
   openPopup(changeAvatarPopup);
@@ -79,9 +79,10 @@ changeAvatarForm.addEventListener('submit', evt => {
     loadingBtn(btnsubChangeAvatar);
     changeAvatar(rez.avatar);
     myInfo.avatar = rez.avatar;
-    resetTextBtn(btnsubChangeAvatar, settingsTextBtns.subChangeAvatar);
+    closePopup(changeAvatarPopup)
   })
-  .finally(() => closePopup(changeAvatarPopup));
+  .catch(err => console.log(`Ошибка: ${err}`))
+  .finally(() => resetTextBtn(btnsubChangeAvatar, settingsTextBtns.subChangeAvatar));
   evt.target.reset();
 });
 
@@ -91,11 +92,12 @@ editProfileForm.addEventListener('submit', evt => {
   .then(rez => {
     loadingBtn(btnsubEditProfile);
     submitProfile(rez.name, rez.about);
-    resetTextBtn(btnsubEditProfile, settingsTextBtns.subEditProfile);
     myInfo.name = rez.name;
     myInfo.about = rez.about;
+    closePopup(editProfilePopup);
   })
-  .finally(() => closePopup(editProfilePopup));
+  .catch(err => console.log(`Ошибка: ${err}`))
+  .finally(() => resetTextBtn(btnsubEditProfile, settingsTextBtns.subEditProfile));
 });
 
 createCardForm.addEventListener('submit', evt => {
@@ -104,20 +106,24 @@ createCardForm.addEventListener('submit', evt => {
   .then(cardInfo => {
     loadingBtn(btnsubCreateCard);
     addNewCard(cardInfo, myInfo._id, elementsCards); 
-    resetTextBtn(btnsubCreateCard, settingsTextBtns.subCreateCard);
+    closePopup(createCardPopup);
   })
-  .finally(() => closePopup(createCardPopup));
+  .catch(err => console.log(`Ошибка: ${err}`))
+  .finally(() => resetTextBtn(btnsubCreateCard, settingsTextBtns.subCreateCard));
   evt.target.reset();
 });
 
 enableValidation(settings); 
 
-elementsCards.addEventListener('click', listenBtnsCard);
-
-submitProfile(myInfo.name, myInfo.about);
-changeAvatar(myInfo.avatar);
-
-getPhotoCards(config)
-.then(cards => [...cards].forEach(card => addNewCard(card, myInfo._id, elementsCards)));
+Promise.all([ 
+  getMyInfo(config),
+  getPhotoCards(config)
+])
+.then(values => {
+  myInfo = values[0];
+  submitProfile(myInfo.name, myInfo.about);
+  changeAvatar(myInfo.avatar);
+  [...values[1]].forEach(card => addNewCard(card, myInfo._id, elementsCards));
+});
 
 export {config};

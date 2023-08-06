@@ -9,7 +9,7 @@ async function getMyInfo(config) {
     return Promise.reject(`ERROR: ${res.status}`);
   })
   .then(rez => {info = rez})
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(`Ошибка: ${err}`)); 
   return info;
 }
 
@@ -22,7 +22,6 @@ function getPhotoCards(config) {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err)); 
 }
 
 function patchProfile(config, newName, newSub) {
@@ -38,7 +37,6 @@ function patchProfile(config, newName, newSub) {
     if (res.ok) return res.json();      
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err))
 }
 
 function postPhotoCard(config, nameCard, linkCard) {
@@ -54,7 +52,6 @@ function postPhotoCard(config, nameCard, linkCard) {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err))
 }
 
 function deletePhotoCard(config, photoCard) {
@@ -66,7 +63,6 @@ function deletePhotoCard(config, photoCard) {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err));
 }
 
 function putLikeCard(config, photoCard) {
@@ -78,7 +74,6 @@ function putLikeCard(config, photoCard) {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err));
 }
 
 function deleteLikeCard(config, photoCard) {
@@ -90,7 +85,6 @@ function deleteLikeCard(config, photoCard) {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
   })
-  .catch(err => console.log(err));
 }
 
 function patchAvatar(config, newAvatar) {
@@ -104,8 +98,7 @@ function patchAvatar(config, newAvatar) {
   .then(res => {
     if (res.ok) return res.json();
     return Promise.reject(`ERROR: ${res.status}`);
-  })
-  .catch(err => console.log(err)); ;
+  })  
 }
 
 export {getMyInfo, getPhotoCards, postPhotoCard, deletePhotoCard, patchProfile, putLikeCard, deleteLikeCard, patchAvatar}
