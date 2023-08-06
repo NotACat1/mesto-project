@@ -11,6 +11,7 @@
   background-position: center center;
   background-repeat: no-repeat;
   transition: opacity .5s ease-out;
+  margin-bottom: 3px;
 }
 
 .element__btn-like:hover {

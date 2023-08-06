@@ -33,10 +33,12 @@
   </header>
   <main>
     <section class="profile">
-      <img src="<%=require('./images/avatar.jpg')%>" alt="Аватар Жак-Ив Кусто" class="profile__avatar">
+      <div class="profile__container-avatar">
+        <img src="" alt="Аватар профиля" class="profile__avatar">         
+      </div>
       <div class="profile__section-info">
-        <h1 class="profile__name">Жак-Ив Кусто</h1>
-        <p class="profile__subtitle">Исследователь океана</p>
+        <h1 class="profile__name"></h1>
+        <p class="profile__subtitle"></p>
         <button aria-label="Редактирование профиля" type="button" class="profile__btn-edit"></button>
       </div>
       <button aria-label="Создание карточки" type="button" class="profile__btn-create-card"></button>
@@ -87,16 +89,40 @@
       </figure>
     </div>
   </div>
+  <div class="popup avatar-popup">
+    <div class="popup__container popup__container_box-shadow">
+      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
+      <form name="changeAvatar" class="form-edit" novalidate>
+        <h2 class="form-edit__title">Обновить аватар</h2>
+        <fieldset class="form-edit__section">
+          <input class="form-edit__input" type="url" id="avatar" name="avatar" placeholder="Ссылка на картинку" required>
+          <span class="form-edit__input-error avatar-input-error"></span>
+        </fieldset>
+        <button class="form-edit__submit" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup delete-card-popup">
+    <div class="popup__container popup__container_box-shadow">
+      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
+      <form name="deleteCard" class="form-edit" novalidate>
+        <h2 class="form-edit__title">Вы уверены?</h2>
+        <button class="form-edit__submit" type="submit">Да</button>
+      </form>
+    </div>
+  </div>
   <template id="card">
     <article class="element">
       <button class="element__btn-delete" aria-label="Удалить" type="button"></button>
       <img class="element__img" alt="" src="">
       <div class="element__section-info">
         <h2 class="element__title"></h2>
-        <button class="element__btn-like" aria-label="Нравится" type="button"></button>
+        <div class="element__group-like">
+          <button class="element__btn-like" aria-label="Нравится" type="button"></button>
+          <p class="element__col-like">0</p>
+        </div>        
       </div>
     </article>
-    
   </template>
 </body>
 </html>

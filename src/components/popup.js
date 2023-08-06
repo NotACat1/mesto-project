@@ -34,4 +34,12 @@ function openPopupFigure(name, link) {
   imgFigure.onload = () => { openPopup(popupFigure); };
 }
 
-export {openPopup, closePopup, openPopupFigure};
+function loadingBtn(btn) {
+  btn.textContent = 'Сохранение...';
+}
+
+function resetTextBtn(btn, text) {
+  btn.textContent = text;
+}
+
+export {openPopup, closePopup, openPopupFigure, loadingBtn, resetTextBtn};
