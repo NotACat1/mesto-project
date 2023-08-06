@@ -4,14 +4,12 @@ import {config} from './index.js';
 
 const deleteCardPopup = document.querySelector('.delete-card-popup');
 const deleteCardForm = deleteCardPopup.querySelector('.form-edit');
+const templatePhotoCard = document.querySelector('#card').content;
 
 let cardForDelete;
 
 function createPhotoCard(cardInfo, myId) {
-  const newPhotoCard = document.createElement('article');
-  newPhotoCard.classList.add('element');
-
-  newPhotoCard.prepend(document.querySelector('#card').content.cloneNode(true));
+  const newPhotoCard = templatePhotoCard.querySelector('.element').cloneNode(true);
   newPhotoCard.id = 'ID_' + cardInfo._id;
   
   const imgPhotoCard = newPhotoCard.querySelector('.element__img');
@@ -39,7 +37,7 @@ function createPhotoCard(cardInfo, myId) {
   }
 
   btnLikeCard.addEventListener('click', evt => {
-    likePhotoCard(config, btnLikeCard, newPhotoCard);
+    likePhotoCard(config, evt.target, newPhotoCard);
   });
 
   imgPhotoCard.addEventListener('click', evt => {
@@ -51,19 +49,19 @@ function createPhotoCard(cardInfo, myId) {
 
 function likePhotoCard(config, btn, card) {
   if (btn.classList.contains('element__btn-like_active')) {
-    deleteLikeCard(config, card)
-    .then(() => {
+    deleteLikeCard(config, card.id.replace(/ID_/, ''))
+    .then(rez => {
       btn.classList.remove('element__btn-like_active');
       const colLikesCard = card.querySelector('.element__col-like');
-      colLikesCard.textContent = Number(colLikesCard.textContent) - 1;
+      colLikesCard.textContent = rez.likes.length;
     })
     .catch(err => console.log(`Ошибка: ${err}`));
   } else {
-    putLikeCard(config, card)
+    putLikeCard(config, card.id.replace(/ID_/, ''))
     .then(() => {
       btn.classList.add('element__btn-like_active');
       const colLikesCard = card.querySelector('.element__col-like');
-      colLikesCard.textContent = Number(colLikesCard.textContent) + 1;
+      colLikesCard.textContent = rez.likes.length;
     })
     .catch(err => console.log(`Ошибка: ${err}`));
   }
@@ -75,7 +73,7 @@ function addNewCard(cardInfo, myId, element) {
 
 deleteCardForm.addEventListener('submit', evt => {
   evt.preventDefault();
-  deletePhotoCard(config, cardForDelete)
+  deletePhotoCard(config, cardForDelete.id.replace(/ID_/, ''))
   .then(() => {
     cardForDelete.remove();
     closePopup(deleteCardPopup);

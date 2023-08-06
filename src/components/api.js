@@ -54,8 +54,8 @@ function postPhotoCard(config, nameCard, linkCard) {
   })
 }
 
-function deletePhotoCard(config, photoCard) {
-  return fetch(`${config.baseUrl}/cards/${photoCard.id.replace(/ID_/, '')}`, {
+function deletePhotoCard(config, photoCardID) {
+  return fetch(`${config.baseUrl}/cards/${photoCardID}`, {
     method: 'DELETE',
     headers: config.headers
   })
@@ -65,8 +65,8 @@ function deletePhotoCard(config, photoCard) {
   })
 }
 
-function putLikeCard(config, photoCard) {
-  return fetch(`${config.baseUrl}/cards/likes/${photoCard.id.replace(/ID_/, '')}`, {
+function putLikeCard(config, photoCardID) {
+  return fetch(`${config.baseUrl}/cards/likes/${photoCardID}`, {
     method: 'PUT',
     headers: config.headers
   })
@@ -76,8 +76,8 @@ function putLikeCard(config, photoCard) {
   })
 }
 
-function deleteLikeCard(config, photoCard) {
-  return fetch(`${config.baseUrl}/cards/likes/${photoCard.id.replace(/ID_/, '')}`, {
+function deleteLikeCard(config, photoCardID) {
+  return fetch(`${config.baseUrl}/cards/likes/${photoCardID}`, {
     method: 'DELETE',
     headers: config.headers
   })

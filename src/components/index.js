@@ -76,7 +76,7 @@ changeAvatarForm.addEventListener('submit', evt => {
   evt.preventDefault();
   patchAvatar(config, newAvatarProfile.value)
   .then(rez => {
-    loadingBtn(btnsubChangeAvatar);
+    loadingBtn(btnsubChangeAvatar, 'Сохранение...');
     changeAvatar(rez.avatar);
     myInfo.avatar = rez.avatar;
     closePopup(changeAvatarPopup)
@@ -90,7 +90,7 @@ editProfileForm.addEventListener('submit', evt => {
   evt.preventDefault();
   patchProfile(config, inputNameProfile.value, inputSubtitleProfile.value)
   .then(rez => {
-    loadingBtn(btnsubEditProfile);
+    loadingBtn(btnsubEditProfile, 'Сохранение...');
     submitProfile(rez.name, rez.about);
     myInfo.name = rez.name;
     myInfo.about = rez.about;
@@ -104,7 +104,7 @@ createCardForm.addEventListener('submit', evt => {
   evt.preventDefault();
   postPhotoCard(config, namePhotoCard.value, linkPhotoCard.value)
   .then(cardInfo => {
-    loadingBtn(btnsubCreateCard);
+    loadingBtn(btnsubCreateCard, 'Создание...');
     addNewCard(cardInfo, myInfo._id, elementsCards); 
     closePopup(createCardPopup);
   })
