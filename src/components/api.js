@@ -1,13 +1,17 @@
+function getResponseData(res) {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`); 
+  }
+  return res.json();
+} 
+
 async function getMyInfo(config) {
   let info = null;
   await fetch(`${config.baseUrl}/users/me`, {
     method: 'GET',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
   .then(rez => {info = rez})
   .catch(err => console.log(`Ошибка: ${err}`)); 
   return info;
@@ -18,10 +22,7 @@ function getPhotoCards(config) {
     method: 'GET',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function patchProfile(config, newName, newSub) {
@@ -33,10 +34,7 @@ function patchProfile(config, newName, newSub) {
       about: newSub
     })
   })
-  .then(res => {
-    if (res.ok) return res.json();      
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function postPhotoCard(config, nameCard, linkCard) {
@@ -48,10 +46,7 @@ function postPhotoCard(config, nameCard, linkCard) {
       link: linkCard
     })
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function deletePhotoCard(config, photoCardID) {
@@ -59,10 +54,7 @@ function deletePhotoCard(config, photoCardID) {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function putLikeCard(config, photoCardID) {
@@ -70,10 +62,7 @@ function putLikeCard(config, photoCardID) {
     method: 'PUT',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function deleteLikeCard(config, photoCardID) {
@@ -81,10 +70,7 @@ function deleteLikeCard(config, photoCardID) {
     method: 'DELETE',
     headers: config.headers
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })
+  .then(res => getResponseData(res))
 }
 
 function patchAvatar(config, newAvatar) {
@@ -95,10 +81,7 @@ function patchAvatar(config, newAvatar) {
       avatar: newAvatar
     })
   })
-  .then(res => {
-    if (res.ok) return res.json();
-    return Promise.reject(`ERROR: ${res.status}`);
-  })  
+  .then(res => getResponseData(res))  
 }
 
 export {getMyInfo, getPhotoCards, postPhotoCard, deletePhotoCard, patchProfile, putLikeCard, deleteLikeCard, patchAvatar}

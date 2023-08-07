@@ -58,7 +58,7 @@ function likePhotoCard(config, btn, card) {
     .catch(err => console.log(`Ошибка: ${err}`));
   } else {
     putLikeCard(config, card.id.replace(/ID_/, ''))
-    .then(() => {
+    .then(rez => {
       btn.classList.add('element__btn-like_active');
       const colLikesCard = card.querySelector('.element__col-like');
       colLikesCard.textContent = rez.likes.length;

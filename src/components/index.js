@@ -120,10 +120,12 @@ Promise.all([
   getPhotoCards(config)
 ])
 .then(values => {
-  myInfo = values[0];
+  let [infoData, infoCards] = values;
+  myInfo = infoData;
   submitProfile(myInfo.name, myInfo.about);
   changeAvatar(myInfo.avatar);
-  [...values[1]].forEach(card => addNewCard(card, myInfo._id, elementsCards));
-});
+  [...infoCards].forEach(card => addNewCard(card, myInfo._id, elementsCards));
+})
+.catch(err => console.log(`Ошибка: ${err}`));
 
 export {config};
