@@ -1,84 +1,106 @@
-import {closePopup, openPopup, openPopupFigure} from './popup.js';
-import {putLikeCard, deleteLikeCard, deletePhotoCard} from './api.js';
-import {config} from './index.js';
+import { cardSelectors } from "../utils/constants";
 
-const deleteCardPopup = document.querySelector('.delete-card-popup');
-const deleteCardForm = deleteCardPopup.querySelector('.form-edit');
-const templatePhotoCard = document.querySelector('#card').content;
+export default class Card {
+  constructor (
+    { _id, name, link, owner, likes },
+    cardTemplateSelector,
+    { deleteCard, likeCardApi, openViewImagePopup }
+  ) {
+    this._cardId = _id; // photo card id
+    this._name = name; // photo card name
+    this._link = link; // link to the image of the photo card
+    this._owner = owner; // information about the author of the photo card
+    this._likes = likes; // list of people who liked the card
 
-let cardForDelete;
+    this._selector = cardTemplateSelector // photo card template selector
 
-function createPhotoCard(cardInfo, myId) {
-  const newPhotoCard = templatePhotoCard.querySelector('.element').cloneNode(true);
-  newPhotoCard.id = 'ID_' + cardInfo._id;
-  
-  const imgPhotoCard = newPhotoCard.querySelector('.element__img');
-  imgPhotoCard.src = cardInfo.link;
-  imgPhotoCard.alt = cardInfo.name;
+    this._deleteCard = deleteCard; // photo card removal function
+    this._likeCard = likeCardApi; // like function photo cards
+    this._viewImage = openViewImagePopup; // the function of opening a pop-up with the image of a photo card
 
-  newPhotoCard.querySelector('.element__title').textContent = cardInfo.name;  
+    this._userAuthor = false; // is the author of the photo card a user
+    this._userLike = false; // did the user like the photos
+  }
 
-  const colLikesCard = newPhotoCard.querySelector('.element__col-like');
-  colLikesCard.textContent = cardInfo.likes.length;
+  // return of the finished marking of the photo card
+  _getElement () {
+    return document
+      .querySelector(this._selector)
+      .content
+      .querySelector('.card')
+      .cloneNode(true);
+  }
 
-  const btnDeleteCard = newPhotoCard.querySelector('.element__btn-delete');
-  if (cardInfo.owner._id !== myId) {
-    btnDeleteCard.remove();
-  } else {
-    btnDeleteCard.addEventListener('click', evt => {
-      openPopup(deleteCardPopup);
-      cardForDelete = newPhotoCard;
+  // deleting a photo card
+  _handleDeleteClick () {
+    this._deleteCard(this);
+  }
+
+  // the layout of the like of the photo card
+  _handleLikeClick () {
+    const method = this._userLike ? 'DELETE': 'PUT';
+    this._likeCard(this._cardId, method)
+      .then(({ likes }) => {
+        this._userLike = !this._userLike;
+        this._likes = likes;
+        this._element.likeCounter.textContent = this._likes.length;
+        this._element.buttons.buttonLikeElement.classList.toggle('card__button-like_active');
+      })
+      .catch((err) => {
+        console.error(`Ошибка: ${err}`);
+      });
+  }
+
+  // the layout of the like of the photo card
+  _setEventListeners () {
+    this._element.buttons.buttonLikeElement.addEventListener('click', (evt) => {
+      this._handleLikeClick();
+    });
+    this._element.buttons.buttonBinElement.addEventListener('click', (evt) => {
+      this._handleDeleteClick();
+    });
+    this._element.cardImage.addEventListener('click', (evt) => {
+      this._viewImage(this._name, this._link);
     });
   }
 
-  const btnLikeCard = newPhotoCard.querySelector('.element__btn-like');
-  if (cardInfo.likes.some(likeAuthor => likeAuthor._id === myId)) {
-    btnLikeCard.classList.add('element__btn-like_active');
+  // checking whether the user liked the photo card
+  _userLikesCard (userId) {
+    return this._likes.some((like) => like._id === userId);
   }
 
-  btnLikeCard.addEventListener('click', evt => {
-    likePhotoCard(config, evt.target, newPhotoCard);
-  });
+  // returns a fully finished card element
+  generate({ userId }) {
+    if (this._owner._id === userId) this._userAuthor = true;
+    if (this._userLikesCard(userId)) this._userLike = true;
+    this._element = this._getElement();
 
-  imgPhotoCard.addEventListener('click', evt => {
-    openPopupFigure(cardInfo.name, cardInfo.link);
-  });
+    // we draw something that does not depend on the user
+    this._element.cardName = this._element.querySelector(cardSelectors.cardName);
+    this._element.cardImage = this._element.querySelector(cardSelectors.cardImage);
+    this._element.likeCounter = this._element.querySelector(cardSelectors.likeCounter);
 
-  return newPhotoCard;
-}
+    this._element.cardName.textContent = this._name;
+    this._element.cardImage.src = this._link;
+    this._element.cardImage.alt = this._name;
+    this._element.likeCounter.textContent = this._likes.length;
 
-function likePhotoCard(config, btn, card) {
-  if (btn.classList.contains('element__btn-like_active')) {
-    deleteLikeCard(config, card.id.replace(/ID_/, ''))
-    .then(rez => {
-      btn.classList.remove('element__btn-like_active');
-      const colLikesCard = card.querySelector('.element__col-like');
-      colLikesCard.textContent = rez.likes.length;
-    })
-    .catch(err => console.log(`Ошибка: ${err}`));
-  } else {
-    putLikeCard(config, card.id.replace(/ID_/, ''))
-    .then(rez => {
-      btn.classList.add('element__btn-like_active');
-      const colLikesCard = card.querySelector('.element__col-like');
-      colLikesCard.textContent = rez.likes.length;
-    })
-    .catch(err => console.log(`Ошибка: ${err}`));
+    // looking for buttons for the card
+    this._element.buttons = {};
+    this._element.buttons.buttonLikeElement = this._element.querySelector(cardSelectors.buttonLike);
+    this._element.buttons.buttonBinElement = this._element.querySelector(cardSelectors.buttonBin);
+
+    // we draw a heart depending on whether it is liked by the user
+    if (this._userLike) {
+      this._element.buttons.buttonLikeElement.classList.add('card__button-like_active')
+    }
+    // we draw the basket depending on whether the user is the author
+    if (!this._userAuthor) {
+      this._element.buttons.buttonBinElement.remove();
+    }
+
+    // hang up the listeners
+    this._setEventListeners();
+    return this._element;
   }
 }
-
-function addNewCard(cardInfo, myId, element) {
-  element.prepend(createPhotoCard(cardInfo, myId));
-}
-
-deleteCardForm.addEventListener('submit', evt => {
-  evt.preventDefault();
-  deletePhotoCard(config, cardForDelete.id.replace(/ID_/, ''))
-  .then(() => {
-    cardForDelete.remove();
-    closePopup(deleteCardPopup);
-  })
-  .catch(err => console.log(`Ошибка: ${err}`));
-});
-
-export {addNewCard};
