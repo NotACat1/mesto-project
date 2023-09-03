@@ -1,9 +1,13 @@
 .profile__avatar {
-  display: block;
-  height: 120px;
+  margin-bottom: 22px;
   width: 120px;
-  object-fit: cover;
-  object-position: center center;
-  background-color: #eee;
+  height: 120px;
   border-radius: 50%;
+  object-fit: cover;
+}
+
+@media all and (min-width: 768px) {
+  .profile__avatar {
+    margin-bottom: 0;
+  }
 }

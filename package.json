@@ -4,8 +4,10 @@
   "description": "posting photo cards",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack serve"
+    "build": "rm -rf dist && webpack --mode production",
+    "dev": "webpack serve",
+    "predeploy": "npm run build",
+    "deploy": "npm run predeploy && gh-pages -d dist"
   },
   "author": "Daniil Ryabov",
   "license": "ISC",

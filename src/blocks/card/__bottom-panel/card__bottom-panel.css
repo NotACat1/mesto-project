@@ -1,0 +1,7 @@
+.card__bottom-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px 25px;
+  border-radius: 0 0 10px 10px;
+}

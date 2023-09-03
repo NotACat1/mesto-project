@@ -8,8 +8,6 @@
   <!-- favicon -->
   <link rel="apple-touch-icon" href="<%=require('./images/favicon/apple-touch-icon.png')%>">
   <link rel="icon" href="<%=require('./images/favicon/favicon.ico')%>" sizes="16x16" type="image/x-icon">
-  <link rel="manifest" href="<%=require('./images/favicon/manifest.json')%>">
-  <link rel="yandex-tableau-widget" href="<%=require('./images/favicon/tableau.json')%>">
 
   <!-- Метатеги для браузера -->
   <meta name="description" content="Сервис Mesto: интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки.">
@@ -28,101 +26,160 @@
   <title>Mesto</title>
 </head>
 <body class="page">
-  <header class="header">
-    <img src="<%=require('./images/logo-white.svg')%>" alt="Логотип Mesto" class="header__logo">
+  <header class="page__section header">
+    <img src="<%=require('./images/logo.svg')%>" class="header__logo" alt="Логотип сайта Mesto">
   </header>
-  <main>
+  <main class="page__section content">
     <section class="profile">
-      <div class="profile__container-avatar">
-        <img src="" alt="Аватар профиля" class="profile__avatar">         
+      <img src="#" class="profile__avatar" alt="Аватар пользователя">
+      <div class="profile__avatar-overlay"></div>
+      <div class="profile__info">
+        <div class="profile__info-main">
+          <h1 class="profile__name"></h1>
+          <button class="button profile__button-edit" type="button" aria-label="Редактировать профиль"></button>
+        </div>
+        <p class="profile__description"></p>
       </div>
-      <div class="profile__section-info">
-        <h1 class="profile__name"></h1>
-        <p class="profile__subtitle"></p>
-        <button aria-label="Редактирование профиля" type="button" class="profile__btn-edit"></button>
-      </div>
-      <button aria-label="Создание карточки" type="button" class="profile__btn-create-card"></button>
+      <button class="button profile__button-add" type="button" aria-label="Добавить новую фотографию"></button>
     </section>
-    <section class="elements">
-      
+    <section class="cards" aria-label="Секция с фотографиями">
+      <ul class="cards__list">
+        <template id="card">
+          <li class="card">
+            <button type="button" class="button card__button-bin" aria-label="Удалить карточку"></button>
+            <img src="" class="card__image" alt="Пользовательская фотография места">
+            <div class="card__bottom-panel">
+              <h2 class="card__text"></h2>
+              <div class="card__button-like-container">
+                <button type="button" class="button card__button-like" aria-label="Поставить лайк"></button>
+                <p class="card__like-counter">0</p>
+              </div>
+            </div>
+          </li>
+        </template>
+      </ul>
     </section>
   </main>
-  <footer class="footer">
-    <p class="footer__copy">&copy;2020 Mesto Russia</p>
+  <footer class="page__section footer">
+    <p class="footer__text">
+      &#169; 2020 Mesto Russia
+    </p>
   </footer>
-  <div class="popup profile-popup">
-    <div class="popup__container popup__container_box-shadow">
-      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="formEdit" class="form-edit" novalidate>
-        <h2 class="form-edit__title">Редактировать профиль</h2>
-        <fieldset class="form-edit__section">
-          <input class="form-edit__input" type="text" id="nickname" name="nickname" value="Жак-Ив Кусто" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="form-edit__input-error nickname-input-error"></span>
-          <input class="form-edit__input" type="text" id="subtitle" name="subtitle" value="Исследователь океана" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="form-edit__input-error subtitle-input-error"></span>
-        </fieldset>
-        <button class="form-edit__submit" type="submit">Сохранить</button>
-      </form>
-    </div>
-  </div>
-  <div class="popup card-popup">
-    <div class="popup__container popup__container_box-shadow">
-      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="createCard" class="form-edit" novalidate>
-        <h2 class="form-edit__title">Новое место</h2>
-        <fieldset class="form-edit__section">
-          <input class="form-edit__input" type="text" id="name" name="name" placeholder="Назание" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ \-]+$" required data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы">
-          <span class="form-edit__input-error name-input-error"></span>
-          <input class="form-edit__input" type="url" id="link" name="link" placeholder="Ссылка на картинку" required>
-          <span class="form-edit__input-error link-input-error"></span>
-        </fieldset>
-        <button class="form-edit__submit" type="submit">Сохранить</button>
-      </form>
-    </div>
-  </div>
-  <div class="popup popup_black image-popup">
+
+  <div class="popup page__section popup_edit-avatar">
     <div class="popup__container">
-      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <figure class="figure-img">
-        <img class="figure-img__img" alt="" src="">
-        <figcaption class="figure-img__caption"></figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="popup avatar-popup">
-    <div class="popup__container popup__container_box-shadow">
-      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="changeAvatar" class="form-edit" novalidate>
-        <h2 class="form-edit__title">Обновить аватар</h2>
-        <fieldset class="form-edit__section">
-          <input class="form-edit__input" type="url" id="avatar" name="avatar" placeholder="Ссылка на картинку" required>
-          <span class="form-edit__input-error avatar-input-error"></span>
+      <button type="button" class="button popup__button-close" aria-label="Закрыть"></button>
+      <form name="edit-avatar-form" class="form" novalidate>
+        <h2 class="form__title">Обновить аватар</h2>
+        <fieldset class="form__input-container">
+          <label class="form__field">
+            <input
+              id="avatar-link-input"
+              type="url"
+              class="form__input-text"
+              name="avatar-link"
+              placeholder="Введите ссылку на новый аватар"
+              required>
+            <span class="avatar-link-input-error form__input-error"></span>
+          </label>
         </fieldset>
-        <button class="form-edit__submit" type="submit">Сохранить</button>
+        <button type="submit" class="button popup__button-save">Сохранить</button>
       </form>
     </div>
   </div>
-  <div class="popup delete-card-popup">
-    <div class="popup__container popup__container_box-shadow">
-      <button aria-label="Закрытие формы" type="button" class="popup__btn-close"></button>
-      <form name="deleteCard" class="form-edit" novalidate>
-        <h2 class="form-edit__title">Вы уверены?</h2>
-        <button class="form-edit__submit" type="submit">Да</button>
+
+  <div class="popup page__section popup_edit-profile">
+    <div class="popup__container">
+      <button type="button" class="button popup__button-close" aria-label="Закрыть"></button>
+      <form name="edit-profile-form" class="form" novalidate>
+        <h2 class="form__title">Редактировать профиль</h2>
+        <fieldset class="form__input-container">
+          <label class="form__field">
+            <input
+              id="user-name-input"
+              type="text"
+              pattern="^[a-zA-Zа-яА-Яё\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+              minlength="2" maxlength="40"
+              class="form__input-text"
+              name="user-name"
+              placeholder="Ваше имя"
+              required>
+            <span class="user-name-input-error form__input-error"></span>
+          </label>
+          <label class="form__field">
+            <input
+              id="user-description-input"
+              type="text"
+              pattern="^[a-zA-Zа-яА-Яё\-\s]+$"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+              minlength="2" maxlength="200"
+              class="form__input-text"
+              name="user-description"
+              placeholder="Ваше описание"
+              required>
+            <span class="user-description-input-error form__input-error"></span>
+          </label>
+        </fieldset>
+        <button type="submit" class="button popup__button-save">Сохранить</button>
       </form>
     </div>
   </div>
-  <template id="card">
-    <article class="element">
-      <button class="element__btn-delete" aria-label="Удалить" type="button"></button>
-      <img class="element__img" alt="" src="">
-      <div class="element__section-info">
-        <h2 class="element__title"></h2>
-        <div class="element__group-like">
-          <button class="element__btn-like" aria-label="Нравится" type="button"></button>
-          <p class="element__col-like">0</p>
-        </div>        
+
+  <div class="popup page__section popup_add-card">
+      <div class="popup__container">
+        <button type="button" class="button popup__button-close" aria-label="Закрыть"></button>
+        <form name="new-card-form" class="form" novalidate>
+          <h2 class="form__title">Новое место</h2>
+          <fieldset class="form__input-container">
+              <label class="form__field">
+                <input
+                  id="place-name-input"
+                  type="text"
+                  minlength="2" maxlength="30"
+                  pattern="^[a-zA-Zа-яА-Яё\-\s]+$"
+                  data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                  class="form__input-text"
+                  name="place-name"
+                  placeholder="Название"
+                  required>
+                <span class="place-name-input-error form__input-error"></span>
+              </label>
+              <label class="form__field">
+                <input
+                  id="place-link-input"
+                  type="url"
+                  class="form__input-text"
+                  name="place-link"
+                  placeholder="Ссылка на картинку"
+                  required>
+                <span class="place-link-input-error form__input-error"></span>
+              </label>
+          </fieldset>
+          <button type="submit" class="button popup__button-save">Создать</button>
+        </form>
       </div>
-    </article>
-  </template>
+    </div>
+
+    <div class="popup page__section popup_view-image">
+      <div class="popup__container popup__container_fullscreen">
+        <button type="button" class="button popup__button-close" aria-label="Закрыть"></button>
+          <figure class="figure">
+            <img src="#" class="figure__image" alt="Пользовательская фотография">
+            <figcaption class="figure__caption"></figcaption>
+          </figure>
+        </div>
+    </div>
+
+    <div class="popup page__section popup_confirm-delete">
+      <div class="popup__container">
+        <button type="button" class="button popup__button-close" aria-label="Закрыть"></button>
+        <form name="confirm-delete-form" class="form" novalidate>
+          <h2 class="form__title">Вы уверены?</h2>
+          <button type="submit" class="button popup__button-save">Да</button>
+        </form>
+      </div>
+    </div>
+
 </body>
 </html>

@@ -1,45 +1,44 @@
-const popupFigure = document.querySelector('.popup.image-popup');
-const imgFigure = popupFigure.querySelector('.figure-img__img');
-const captionFigure = popupFigure.querySelector('.figure-img__caption');
+export default class Popup {
+  constructor (selector) {
+    this._popupElement = document.querySelector(selector);
+    this._form = this._popupElement.querySelector('.form');
+    this._handleEscClose = this._handleEscClose.bind(this);
+    this._buttonClose = this._popupElement.querySelector('.popup__button-close');
+  }
 
-function openPopup(popup) {
-  document.addEventListener('keydown', closeByEsc);
-  document.addEventListener('mousedown', closeByOverlay);
-  popup.classList.add('popup_opened');
-}
+  // closing by pressing Esc
+  _handleEscClose (evt) {
+    if (evt.key === 'Escape') {
+      this.close();
+    }
+  }
 
-function closePopup(popup) {
-  document.removeEventListener('keydown', closeByEsc);
-  document.removeEventListener('mousedown', closeByOverlay);
-  popup.classList.remove('popup_opened');
-}
+  // closing by clicking on the overlay
+  _handleOverlayClose (evt) {
+    if (evt.target.classList.contains('popup_opened')) {
+      this.close();
+    }
+  }
 
-function closeByEsc(evt) {
-  if (evt.key === 'Escape') {
-    const popup = document.querySelector('.popup.popup_opened');
-    closePopup(popup);
+  // adding event handlers
+  setEventListeners () {
+    this._popupElement.addEventListener('click', (evt) => {
+      this._handleOverlayClose(evt);
+    });
+    this._buttonClose.addEventListener('click', (evt) => {
+      this.close();
+    });
+  }
+
+  // open popup
+  open () {
+    this._popupElement.classList.add('popup_opened');
+    document.addEventListener('keydown', this._handleEscClose);
+  }
+
+  // close popup
+  close () {
+    this._popupElement.classList.remove('popup_opened');
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 }
-
-function closeByOverlay(evt) {
-  if (evt.target.classList.contains('popup_opened')) {
-    closePopup(evt.target);
-  }
-}
-
-function openPopupFigure(name, link) {
-  imgFigure.alt = name;
-  imgFigure.src = link;
-  captionFigure.textContent = name;
-  imgFigure.onload = () => { openPopup(popupFigure); };
-}
-
-function loadingBtn(btn, text) {
-  btn.textContent = text;
-}
-
-function resetTextBtn(btn, text) {
-  btn.textContent = text;
-}
-
-export {openPopup, closePopup, openPopupFigure, loadingBtn, resetTextBtn};
