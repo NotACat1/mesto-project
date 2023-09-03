@@ -1,16 +1,13 @@
-.profile {
+.profile__info {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   max-width: 100%;
-  position: relative;
 }
 
 @media all and (min-width: 768px) {
-  .profile {
-    display: grid;
-    gap: 30px;
-    grid-template-columns: 120px minmax(30px, 550px) 150px;
+  .profile__info {
+    align-items: flex-start;
   }
 }
